@@ -1,4 +1,4 @@
 com.sahaj.parkinglot
 com.sahaj.parkinglot.constants
 com.sahaj.parkinglot.model
-com.sahaj.parkinglot.service
+com.sahaj.parkinglot.serviceimpl
