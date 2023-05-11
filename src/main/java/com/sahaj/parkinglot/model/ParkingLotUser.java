@@ -18,8 +18,4 @@ public class ParkingLotUser implements Serializable {
   boolean hasExitedParking;
   VehicleType vehicleType;
   double totalFee;
-
-  public ParkingLotUser() {
-    this.id = DataStore.getInstance().generateId();
-  }
 }

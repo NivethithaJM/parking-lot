@@ -9,7 +9,6 @@ import lombok.ToString;
 
 @Getter
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 public class SlotFeeInfo implements Serializable, Comparable<SlotFeeInfo> {
   private long start;

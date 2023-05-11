@@ -76,9 +76,6 @@ public class LocationServiceImpl implements LocationService {
   }
 
 
-
-
-
   private void generateReceipt(ParkingLotUser user) {
     if (user.isHasExitedParking()) {
       System.out.println("Parking Receipt");
