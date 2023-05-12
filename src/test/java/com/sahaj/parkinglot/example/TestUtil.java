@@ -3,10 +3,15 @@ package com.sahaj.parkinglot.example;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestPropertySource;
 
-import com.sahaj.parkinglot.model.VehicleType;
+import com.sahaj.parkinglot.constants.VehicleType;
+import com.sahaj.parkinglot.model.response.ParkingReceipt;
+import com.sahaj.parkinglot.model.response.ParkingTicket;
 import com.sahaj.parkinglot.service.ParkingService;
 import com.sahaj.parkinglot.serviceimpl.MiscellaneousServiceImpl;
+
+@TestPropertySource(properties = {"sahaj.data-source.file=src/main/resources/data-store-test.json"})
 
 public class TestUtil {
 
@@ -19,17 +24,13 @@ public class TestUtil {
   @Autowired
   MiscellaneousServiceImpl miscellaneousService;
 
-  void parkUser(String locationName, VehicleType vehicleType, String vehicleName, int slotNumber,
+  ParkingTicket parkUser(String locationName, VehicleType vehicleType, String vehicleName, int slotNumber,
       LocalDateTime entryDate) {
-    try {
-      parkingService.enterParking(locationName, vehicleType, vehicleName, slotNumber, entryDate);
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
+    return parkingService.enterParking(locationName, vehicleType, vehicleName, slotNumber, entryDate);
   }
 
-  void unParkUser(String locationName, VehicleType vehicleType, int slotNo, LocalDateTime exitDate) {
-    parkingService.exitParking(locationName, vehicleType, slotNo, exitDate);
+  ParkingReceipt unParkUser(String locationName, VehicleType vehicleType, int slotNo, LocalDateTime exitDate) {
+    return parkingService.exitParking(locationName, vehicleType, slotNo, exitDate);
   }
 
 }

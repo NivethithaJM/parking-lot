@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.sahaj.parkinglot.model.DataStore;
 import com.sahaj.parkinglot.model.Location;
 import com.sahaj.parkinglot.model.ParkingLotUser;
-import com.sahaj.parkinglot.model.VehicleType;
+import com.sahaj.parkinglot.constants.VehicleType;
 import com.sahaj.parkinglot.model.VehicleTypeParkingSlotInfo;
+import com.sahaj.parkinglot.model.response.ParkingReceipt;
+import com.sahaj.parkinglot.model.response.ParkingTicket;
 import com.sahaj.parkinglot.service.FeeCalculationService;
 import com.sahaj.parkinglot.service.LocationService;
 
@@ -28,19 +30,22 @@ public class LocationServiceImpl implements LocationService {
   }
 
   @Override
-  public void addParkingLotUser(String locationName, ParkingLotUser user) {
+  public ParkingTicket addParkingLotUser(String locationName, ParkingLotUser user) {
     Location location = this.getLocation(locationName);
     VehicleTypeParkingSlotInfo parkingSlotInfo = location.getVehicleTypeVsParkingSlotInfo().get(user.getVehicleType());
     checkIfCanAccommodateVehicle(parkingSlotInfo);
     checkIfRequestedSlotAvailable(location, user.getSlotNo());
     location.getParkingLotUsers().add(user);
     parkingSlotInfo.setAvailableSlots(parkingSlotInfo.getAvailableSlots() - 1);
-    this.generateReceipt(user);
+    ParkingTicket ticket =
+        ParkingTicket.builder().id(user.getId()).slotNo(user.getSlotNo()).entryDate(user.getEntryDate()).build();
+    ticket.prettyPrint();
     DataStore.saveDataStore();
+    return ticket;
   }
 
   @Override
-  public void removeParkingLotUser(String locationName, VehicleType vehicleType, int slotNumber,
+  public ParkingReceipt removeParkingLotUser(String locationName, VehicleType vehicleType, int slotNumber,
       LocalDateTime exitDate) {
     Location location = this.getLocation(locationName);
     Optional<ParkingLotUser> userOptional =
@@ -54,8 +59,11 @@ public class LocationServiceImpl implements LocationService {
       user.setExitDate(exitDate);
       user.setTotalFee(feeCalculationService.calculateFee(user, parkingSlotInfo.getFeeModel()));
       DataStore.saveDataStore();
-      this.generateReceipt(user);
-      return;
+      ParkingReceipt receipt =
+          ParkingReceipt.builder().id(user.getId()).slotNo(user.getSlotNo()).entryDate(user.getEntryDate())
+              .exitDate(user.getExitDate()).totalFee(user.getTotalFee()).build();
+      receipt.prettyPrint();
+      return receipt;
     }
     throw new RuntimeException("Slot is vacant!!");
   }
@@ -73,23 +81,5 @@ public class LocationServiceImpl implements LocationService {
     user.ifPresent(x -> {
       throw new RuntimeException("Slot not available");
     });
-  }
-
-
-  private void generateReceipt(ParkingLotUser user) {
-    if (user.isHasExitedParking()) {
-      System.out.println("Parking Receipt");
-      System.out.format("%30s | R-%05d\n", "Receipt Number", user.getId());
-      System.out.format("%30s | %05d\n", "Spot Number", user.getSlotNo());
-      System.out.format("%30s | %s\n", "Entry Date Time", user.getEntryDate());
-      System.out.format("%30s | %s\n", "Exit Date Time", user.getExitDate());
-      System.out.format("%30s | %s\n", "Fees", user.getTotalFee());
-    } else {
-      System.out.println("Parking Ticket");
-      System.out.format("%30s | %05d\n", "Ticket Number", user.getId());
-      System.out.format("%30s | %05d\n", "Spot Number", user.getSlotNo());
-      System.out.format("%30s | %s\n", "Entry Date Time", user.getEntryDate());
-    }
-
   }
 }

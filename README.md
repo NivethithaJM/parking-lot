@@ -13,7 +13,13 @@
 
 #### Test file : ExampleTests
 
-    * Contains test case from the problem statment document. 
+    * Contains test case from the problem statment document.
+
+#### Start application from ParkingLotApplication.java
+
+http://localhost:8081/swagger-ui/#/parking-controller
+
+Use above url to access the apis once application is up. 
 
 
 

@@ -2,10 +2,12 @@ package com.sahaj.parkinglot.service;
 
 import java.time.LocalDateTime;
 
-import com.sahaj.parkinglot.model.VehicleType;
+import com.sahaj.parkinglot.constants.VehicleType;
+import com.sahaj.parkinglot.model.response.ParkingReceipt;
+import com.sahaj.parkinglot.model.response.ParkingTicket;
 
 public interface ParkingService {
-  void enterParking(String locationName, VehicleType vehicleType, String vehicleName, int slotNumber,
+  ParkingTicket enterParking(String locationName, VehicleType vehicleType, String vehicleName, int slotNumber,
       LocalDateTime entryDate);
-  void exitParking(String locationName, VehicleType vehicleType, int slotNumber, LocalDateTime exitDate);
+  ParkingReceipt exitParking(String locationName, VehicleType vehicleType, int slotNumber, LocalDateTime exitDate);
 }
