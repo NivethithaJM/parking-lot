@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.sahaj.parkinglot.model.DataStore;
-import com.sahaj.parkinglot.model.VehicleType;
+import com.sahaj.parkinglot.constants.VehicleType;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

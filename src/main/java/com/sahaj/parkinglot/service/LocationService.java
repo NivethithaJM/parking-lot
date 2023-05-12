@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 
 import com.sahaj.parkinglot.model.Location;
 import com.sahaj.parkinglot.model.ParkingLotUser;
-import com.sahaj.parkinglot.model.VehicleType;
+import com.sahaj.parkinglot.constants.VehicleType;
+import com.sahaj.parkinglot.model.response.ParkingReceipt;
+import com.sahaj.parkinglot.model.response.ParkingTicket;
 
 public interface LocationService {
   /**
@@ -21,7 +23,7 @@ public interface LocationService {
    * @param locationName locationName
    * @param user         ParkingLotUser
    */
-  void addParkingLotUser(String locationName, ParkingLotUser user);
+  ParkingTicket addParkingLotUser(String locationName, ParkingLotUser user);
 
   /**
    * remove a parking lot user from selected location
@@ -31,5 +33,5 @@ public interface LocationService {
    * @param slotNumber   slotNumber
    * @param exitDate     exitDate
    */
-  void removeParkingLotUser(String locationName, VehicleType vehicleType, int slotNumber, LocalDateTime exitDate);
+  ParkingReceipt removeParkingLotUser(String locationName, VehicleType vehicleType, int slotNumber, LocalDateTime exitDate);
 }

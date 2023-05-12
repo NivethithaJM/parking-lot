@@ -3,6 +3,8 @@ package com.sahaj.parkinglot.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.sahaj.parkinglot.constants.VehicleType;
+
 import lombok.Data;
 import lombok.ToString;
 

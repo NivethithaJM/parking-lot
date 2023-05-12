@@ -8,8 +8,13 @@ import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sahaj.parkinglot.constants.ConfigProps;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -17,7 +22,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class DataStore implements Serializable {
-  private static final String dataStoreFileName = "src/main/resources/data-store.json";
   private static DataStore dataStore = null;
   private final HashMap<String, Location> nameVsLocationMap;
   private int idGenerator = 0;
@@ -28,13 +32,14 @@ public class DataStore implements Serializable {
 
   private static DataStore readDataStore() {
     JSONParser jsonParser = new JSONParser();
-    File file = new File(dataStoreFileName);
+    File file = new File(ConfigProps.dataStoreFileName);
     FileReader fileReader;
     try {
       fileReader = new FileReader(file);
       JSONObject unParsedDataStore = (JSONObject) jsonParser.parse(fileReader);
       return (new ObjectMapper()).convertValue(unParsedDataStore, DataStore.class);
     } catch (Exception ignored) {
+      DataStore.initializeDataStore();
     }
     return null;
   }
@@ -51,7 +56,7 @@ public class DataStore implements Serializable {
 
   public static void saveDataStore() {
     try {
-      FileWriter fileOut = new FileWriter(dataStoreFileName);
+      FileWriter fileOut = new FileWriter(ConfigProps.dataStoreFileName);
       String y = new ObjectMapper().writeValueAsString(DataStore.getInstance());
       fileOut.write(y);
       fileOut.close();
